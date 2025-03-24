@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tree Visualization and TreeMap with Custom Levels</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 20px;
+    }
+    #treeContainer, #treeMapContainer {
+      width: 90%;
+      height: 600px;
+      margin: 20px auto;
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Tree of the data </h2>
+  <div id="treeContainer"></div>
+
+  <h2>TreeMap of the data </h2>
+  <div id="treeMapContainer"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+  <script>
+    // Tree Visualization Data
+    const treeData = [
+      {
+        name: 'A',
+        children: [
+          {
+            name: 'B',
+            children: [
+              { name: 'D', value: 30 },
+              { name: 'E', value: 50 }
+            ]
+          },
+          {
+            name: 'C',
+            children: [
+              { name: 'F', value: 20 },
+              { name: 'G', value: 40 },
+              { name: 'H', value: 60 }
+            ]
+          }
+        ]
+      }
+    ];
+
+    // Recursive function to set symbolSize by level for Tree Visualization
+    function setNodeSizes(node, depth = 0) {
+      const sizeByLevel = [25, 18, 12]; // level 0, 1, 2
+      node.symbolSize = sizeByLevel[depth] || 10;
+
+      if (node.children) {
+        node.children.forEach(child => setNodeSizes(child, depth + 1));
+      }
+    }
+
+    setNodeSizes(treeData[0]);
+
+    // Tree Visualization Option
+    const treeChart = echarts.init(document.getElementById('treeContainer'));
+    treeChart.setOption({
+      tooltip: {
+        trigger: 'item',
+        triggerOn: 'mousemove'
+      },
+      series: [
+        {
+          type: 'tree',
+          data: treeData,
+          layout: 'radial',
+          symbol: 'circle',
+          initialTreeDepth: -1,
+          label: {
+            position: 'rotate',
+            verticalAlign: 'middle',
+            align: 'center',
+            fontSize: 12
+          },
+          leaves: {
+            label: {
+              position: 'rotate',
+              verticalAlign: 'middle',
+              align: 'center'
+            }
+          },
+          expandAndCollapse: true,
+          animationDuration: 750,
+          animationDurationUpdate: 750,
+          levels: [
+            {
+                itemStyle: {
+                    color: '#555', // Dark gray for level 1
+                    borderWidth: 10,
+                    gapWidth: 10
+                },
+                upperLabel: { show: true }
+            },
+            {
+                itemStyle: {
+                    color: '#52AB80', // Green for level 2
+                    borderWidth: 5,
+                    gapWidth: 5
+                },
+                upperLabel: { show: true }
+            },
+            {
+                itemStyle: {
+                    borderColor: '#e8aa63', // Gold border for level 3
+                    borderWidth: 5,
+                    gapWidth: 2
+                },
+                upperLabel: { show: true }
+            }
+          ]
+        }
+      ]
+    });
+
+    // TreeMap Data
+    const treeMapData = [
+      {
+        name: 'A',
+        itemStyle: { color: '#F28C28' },
+        children: [
+          {
+            name: 'B',
+            itemStyle: { color: '#52AB80' },
+            children: [
+              { name: 'D', value: 30, itemStyle: { color: '#e8aa63' } },
+              { name: 'E', value: 50, itemStyle: { color: '#c8c8c8' } }
+            ]
+          },
+          {
+            name: 'C',
+            itemStyle: { color: '#b5d8ff' }, 
+            children: [
+              { name: 'F', value: 20, itemStyle: { color: '#e2e2e2' } },
+              { name: 'G', value: 40, itemStyle: { color: '#a9d8ff' } },
+              { name: 'H', value: 60, itemStyle: { color: '#83c5ff' } }
+            ]
+          }
+        ]
+      }
+    ];
+
+    // TreeMap Chart Option
+    const treeMapChart = echarts.init(document.getElementById('treeMapContainer'));
+    treeMapChart.setOption({
+      tooltip: {
+        formatter: info => `${info.name}: ${info.value || ''}`
+      },
+      series: [
+        {
+          type: 'treemap',
+          data: treeMapData,
+          roam: false,
+          nodeClick: false,
+          breadcrumb: { show: true },
+          label: {
+            show: true,
+            color: '#fff',
+            fontWeight: 'bold',
+            fontSize: 14
+          },
+          itemStyle: {
+            borderColor: '#e8aa63',
+            borderWidth: 4,
+            gapWidth: 10
+          },
+          levels: [
+            {
+                itemStyle: {
+                    color: '#555',  
+                    borderWidth: 10,
+                    gapWidth: 10
+                },
+                upperLabel: { show: true }
+            },
+            {
+                itemStyle: {
+                    color: '#52AB80',  
+                    borderWidth: 5,
+                    gapWidth: 5
+                },
+                upperLabel: { show: true }
+            },
+            {
+                itemStyle: {
+                    borderColor: '#e8aa63', 
+                    borderWidth: 5,
+                    gapWidth: 2
+                },
+                upperLabel: { show: true }
+            }
+          ]
+        }
+      ]
+    });
+  </script>
+</body>
+</html>
