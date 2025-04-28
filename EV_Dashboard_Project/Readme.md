@@ -17,7 +17,7 @@
 
 1. **Clone or Download the Project:**
    ```bash
-   git clone https://github.com/Patil1707/DV/tree/2052c847ce6935c99ea0e4d9d8505edfcbe414e4/EV_Dashboard_Project
+   git clone https://github.com/Patil1707/DV
    ```
 2. **Project Structure:**
    ```bash
